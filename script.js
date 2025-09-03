@@ -1,3 +1,4 @@
+let tasks = [];
 const btnadd = document.getElementById("add-task");
 const inputpop = document.getElementById("pop");
 const submit = document.getElementById("submit");
@@ -7,80 +8,95 @@ btnadd.addEventListener("click", function () {
   popup.classList.add("show");
 });
 submit.addEventListener("click", function () {
+  const task = document.createElement("div");
+task.classList.add("task");
+task.innerHTML = `
+  
+    <!-- Left: Title -->
+    <h3>${inputpop.value}</h3>
+
+    <!-- Right: Buttons -->
+    <div style="display: flex; gap: 0.5rem">
+      <button class="circular delete-btn" type="button" id="delete">
+        <span class="material-symbols-outlined"> delete </span>
+      </button>
+      <button class="circular completed" type="button">
+        <span class="material-symbols-outlined"> download_done </span>
+      </button>
+      <button class="circular edit-btn" type="button">
+        <span class="material-symbols-outlined"> edit </span>
+      </button>
+    </div>
+  </div>
+`;
+
+// Append the actual DOM element
+document.getElementById("list").appendChild(task);
+//logicof delete btn
+ const deleteBtn = task.querySelector(".delete-btn");
+deleteBtn.addEventListener("click",function(){
+  task.remove()
+})
+
+//logic of done btn
+const complete = task.querySelector(".completed")
+complete.addEventListener("click", function(){
+  task.classList.add("completed")
+  confetti();
+
+})
  
-  const text = inputpop.value.trim();
-  if (!text) return;
-  //add element which will be the task
-  const card = document.createElement('div');
-card.classList.add('card');//give it a class name to style it later
-//Create an icons container + buttons
-const icons = document.createElement('div');
-icons.classList.add('icons');
-//done btn
-const doneBtn = document.createElement('button');
-doneBtn.type = 'button';
-doneBtn.classList.add('done-btn');
-doneBtn.textContent = '✔';
-//edit btn
-const editBtn = document.createElement('button');
-editBtn.type = 'button';
-editBtn.classList.add('edit-btn');
-editBtn.textContent = '✏️';
-//delete btn
-const deleteBtn = document.createElement('button');
-deleteBtn.type = 'button';
-deleteBtn.classList.add('delete-btn');
-deleteBtn.textContent = '🗑️';
-//add these buttons to the icons div
-icons.appendChild(doneBtn);
-icons.appendChild(editBtn);
-icons.appendChild(deleteBtn);
-//Create the task text element
-const taskText = document.createElement('span');
-taskText.classList.add('task-text');
-taskText.textContent = text;
-//Put everything into the card
-card.appendChild(icons);
-card.appendChild(taskText);
-//Add the card to the list
-taskList.prepend(card);
+//logic of edit btn
+const editBtn = task.querySelector(".edit-btn");
+editBtn.addEventListener("click", () => {
+const taskText = task.querySelector("h3");
+const editInput = document.createElement("input");
+editInput.type = "text";
+editInput.value = taskText.textContent; 
+task.replaceChild(editInput, taskText);
+editInput.focus(); 
+function finishEdit() {
+  const newValue = editInput.value.trim();
+  taskText.textContent = newValue || taskText.textContent;
+  task.replaceChild(taskText, editInput);
+}
 
-inputpop.value = '';
-popup.classList.remove("show");
-//Add functionality to each button
-deleteBtn.addEventListener('click', () => card.remove());
-
-doneBtn.addEventListener('click', () => {
-  card.classList.toggle('done');
+editInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") finishEdit();
 });
+editInput.addEventListener("blur", finishEdit);
 
-editBtn.addEventListener('click', () => {
-  const editInput = document.createElement('input');
-  editInput.type = 'text';
-  editInput.value = taskText.textContent;
-  editInput.classList.add('edit-input');
+});
+inputpop.value = "";
 
-  card.replaceChild(editInput, taskText);
-  editInput.focus();
 
-  editInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') finishEdit();
-  });
-  editInput.addEventListener('blur', finishEdit);
+// local storage 
+// créer objet
+const newTask = { text: inputpop.value, done: false };
 
-  function finishEdit() {
-    const newValue = editInput.value.trim();
-    taskText.textContent = newValue || taskText.textContent;
-    card.replaceChild(taskText, editInput);
+// ajouter dans le tableau
+tasks.push(newTask);
+
+// sauvegarder dans local storage
+localStorage.setItem("tasks", JSON.stringify(tasks));
+// vérifier s’il y a des tâches sauvegardées
+const savedTasks = localStorage.getItem("tasks");
+
+if (savedTasks) {
+  tasks = JSON.parse(savedTasks); // convertir en tableau
+  // recréer chaque tâche dans le DOM
+  for (let t of tasks) {
+    
   }
+}
+
 });
-inputpop.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') submit.click();
+ inputpop.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") submit.click();
+  });
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") popup.classList.remove("show");
 });
-});
-window.addEventListener('keydown', e => {
-  if (e.key === 'Escape') popup.classList.remove('show');
-});
-popup.addEventListener('click', e => {
-  if (e.target === popup) popup.classList.remove('show');
+popup.addEventListener("click", (e) => {
+  if (e.target === popup) popup.classList.remove("show");
 });

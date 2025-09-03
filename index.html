@@ -5,24 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <link rel="shortcut icon" href="images/kitty.png" type="image/png" />
+   <link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+
     <title>ToDo List</title>
   </head>
   <body>
     <div id="all">
-      <div id="title">
-        <h1>Stay <span>Organized</span>!</h1>
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem;
+          background-color: hsl(260, 100%, 97%);
+          border-radius: 10px;
+          width: 50%;
+        "
+      >
+        <div id="title">
+          <h1 style="margin: 0">
+            Stay <span style="color: hsl(255, 85%, 25%)">Organized</span>!
+          </h1>
+        </div>
+
+        <button
+          id="add-task"
+          type="submit"
+          style="
+            padding: 0.6rem 1.2rem;
+            border-radius: 28px;
+            font-size: 1rem;
+            cursor: pointer;
+          "
+        >
+          Add Task
+        </button>
       </div>
-      <div id="list"></div>
-      <button id="add-task" type="submit">Add Task</button>
+      <div id="list" style="height: 50vh; width: 50%">
+        
+      </div>
     </div>
     <div id="absolute">
       <div id="popup">
         <h2>Add a New Task Here</h2>
-        <input id="pop" />
-        <button id="submit" type="submit">Submit</button>
+        <input id="pop" required/>
+        <button id="submit" type="submit" >Submit</button>
       </div>
     </div>
 
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   </body>
 </html>
