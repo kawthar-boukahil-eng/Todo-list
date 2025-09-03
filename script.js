@@ -5,7 +5,6 @@ const submit = document.getElementById("submit");
 const popup = document.getElementById("absolute");
 const taskList = document.getElementById("list");
 
-// Charger les tâches sauvegardées au démarrage
 const savedTasks = localStorage.getItem("tasks");
 if (savedTasks) {
   tasks = JSON.parse(savedTasks);
@@ -14,12 +13,10 @@ if (savedTasks) {
   }
 }
 
-// Ouvrir popup
 btnadd.addEventListener("click", function () {
   popup.classList.add("show");
 });
 
-// Fonction pour créer une tâche dans le DOM
 function createTaskElement(text, done = false) {
   const task = document.createElement("div");
   task.classList.add("task");
@@ -40,7 +37,6 @@ function createTaskElement(text, done = false) {
     </div>
   `;
 
-  // Supprimer
   const deleteBtn = task.querySelector(".delete-btn");
   deleteBtn.addEventListener("click", function () {
     task.remove();
@@ -48,7 +44,6 @@ function createTaskElement(text, done = false) {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   });
 
-  // Marquer comme terminé
   const completeBtn = task.querySelector(".completed-btn");
   completeBtn.addEventListener("click", function () {
     task.classList.toggle("completed");
@@ -59,7 +54,6 @@ function createTaskElement(text, done = false) {
     confetti();
   });
 
-  // Éditer
   const editBtn = task.querySelector(".edit-btn");
   editBtn.addEventListener("click", () => {
     const taskText = task.querySelector("h3");
@@ -90,25 +84,19 @@ function createTaskElement(text, done = false) {
   taskList.appendChild(task);
 }
 
-// Quand on clique sur Submit
 submit.addEventListener("click", function () {
   if (inputpop.value.trim() === "") return;
 
-  // Ajouter dans DOM
   createTaskElement(inputpop.value);
 
-  // Ajouter dans tableau
   tasks.push({ text: inputpop.value, done: false });
 
-  // Sauvegarder
   localStorage.setItem("tasks", JSON.stringify(tasks));
 
-  // Réinitialiser input
   inputpop.value = "";
   popup.classList.remove("show");
 });
 
-// Raccourcis clavier
 inputpop.addEventListener("keydown", (e) => {
   if (e.key === "Enter") submit.click();
 });
